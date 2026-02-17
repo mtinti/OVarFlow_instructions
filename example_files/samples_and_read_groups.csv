@@ -1,0 +1,15 @@
+Reference Sequence:,SW_LdonovaniBPK282A1.fa.gz
+Reference Annotation:,SW_LdonovaniBPK282A1.sorted.gff
+
+Min sequence length:,2000
+
+old gvcf to include:,
+
+forward reads,reverse reads,ID,PL - plattform technology,CN - sequencing center,LB - library name,SM - uniq sample name
+LdSQSBLA3_R1.fastq.gz,LdSQSBLA3_R2.fastq.gz,id_LdSQSBLA3,illumina,ENA,lib_LdSQSBLA3,LdSQSBLA3
+LdSQSBLA1_R1.fastq.gz,LdSQSBLA1_R2.fastq.gz,id_LdSQSBLA1,illumina,ENA,lib_LdSQSBLA1,LdSQSBLA1
+LdSQSBLA2_R1.fastq.gz,LdSQSBLA2_R2.fastq.gz,id_LdSQSBLA2,illumina,ENA,lib_LdSQSBLA2,LdSQSBLA2
+LdSQSBLA6_R1.fastq.gz,LdSQSBLA6_R2.fastq.gz,id_LdSQSBLA6,illumina,ENA,lib_LdSQSBLA6,LdSQSBLA6
+LdSQSWT_R1.fastq.gz,LdSQSWT_R2.fastq.gz,id_LdSQSWT,illumina,ENA,lib_LdSQSWT,LdSQSWT
+LdSQSBLA5_R1.fastq.gz,LdSQSBLA5_R2.fastq.gz,id_LdSQSBLA5,illumina,ENA,lib_LdSQSBLA5,LdSQSBLA5
+LdSQSBLA4_R1.fastq.gz,LdSQSBLA4_R2.fastq.gz,id_LdSQSBLA4,illumina,ENA,lib_LdSQSBLA4,LdSQSBLA4
