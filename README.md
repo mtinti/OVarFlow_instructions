@@ -11,6 +11,7 @@
 
 ## Make .gz example 
 
+```
 seqkit sort -n \
 REFERENCE_INPUT_DIR_SylvioX10-1/TriTrypDB-68_TcruziSylvioX10-1_Genome.fasta \
 > REFERENCE_INPUT_DIR_SylvioX10-1/TriTrypDB-68_TcruziSylvioX10-1_Genome.sorted.fasta
@@ -24,7 +25,7 @@ REFERENCE_INPUT_DIR_SylvioX10-1/TriTrypDB-68_TcruziSylvioX10-1.gff \
 
 cp REFERENCE_INPUT_DIR_SylvioX10-1/TriTrypDB-68_TcruziSylvioX10-1.sorted.gff \
 REFERENCE_INPUT_DIR_SylvioX10-1/SW_SylvioX10-1.sorted.gff
-
+```
 
 
 ## input folder structure
