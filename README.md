@@ -28,13 +28,13 @@ REFERENCE_INPUT_DIR_SylvioX10-1/SW_SylvioX10-1.sorted.gff
 
 
 ## input folder structure
-
+```
 INPUT DIR (ovarflow_input_LdiBPK282A1 in cluster example)
 |-FASTQ_INPUT_DIR
 |-OLD_GVCF_FILES
 |-REFERENCE_INPUT_DIR
 |-samples_and_read_groups.csv
-
+```
 
 ## example of samples_and_read_groups.csv
 
