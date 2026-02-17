@@ -38,7 +38,7 @@ INPUT DIR (ovarflow_input_LdiBPK282A1 in cluster example)
 
 ## example of samples_and_read_groups.csv
 
-'''
+```
 Reference Sequence:,SW_SylvioX10-1.fa.gz
 Reference Annotation:,SW_SylvioX10-1.sorted.gff
 
@@ -49,7 +49,7 @@ old gvcf to include:,
 forward reads,reverse reads,ID,PL - plattform technology,CN - sequencing center,LB - library name,SM - uniq sample name
 V350357015_L02_B5GANIokjbRAAGA-30_R1.fastq.gz,V350357015_L02_B5GANIokjbRAAGA-30_R2.fastq.gz,id_TcCRK12_dKOdd1,illumina,ENA,lib_TcCRK12_dKOdd1,TcCRK12_dKOdd1
 V350357015_L02_B5GANIokjbRAAHA-114_R1.fastq.gz,V350357015_L02_B5GANIokjbRAAHA-114_R2.fastq.gz,id_TcCRK12BirA5C6,illumina,ENA,lib_TcCRK12BirA5C6,TcCRK12BirA5C6
-'''
+```
 
 ## Logic
 
