@@ -53,7 +53,7 @@ V350357015_L02_B5GANIokjbRAAHA-114_R1.fastq.gz,V350357015_L02_B5GANIokjbRAAHA-11
 ```
 
 ## Logic
-
+```
 ovarflow then expect expect 
 V350357015_L02_B5GANIokjbRAAGA-30_R1.fastq.gz
 V350357015_L02_B5GANIokjbRAAGA-30_R2.fastq.gz
@@ -68,7 +68,7 @@ REFERENCE_INPUT_DIR
 SW_SylvioX10-1.fa.gz (sorted gzipped)
 SW_SylvioX10-1.sorted.gff (sorted) can be gzipped as well, it works without gzip
 used gff3sort.pl at https://github.com/tao-bioinfo/gff3sort/tree/master for sorting, might not be necessary
-
+```
 
 ## miscellaneous and utility script, not strictly necessary
 
