@@ -43,6 +43,12 @@ OVarFlow expects paired files named **exactly**:
 <sample>_R2.fastq.gz
 ```
 
+If a sample has more than one pair of FASTQ files (e.g. multiple lanes), concatenate them first before renaming. Run the following from the folder containing the files:
+
+```bash
+cat *_1.fq.gz > sample_1.fq.gz && cat *_2.fq.gz > sample_2.fq.gz
+```
+
 Rename your files to match this convention before placing them in `FASTQ_INPUT_DIR/`.
 
 ---
