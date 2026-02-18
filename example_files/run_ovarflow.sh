@@ -13,12 +13,17 @@ set -e
 
 # ── USER SETTINGS ─────────────────────────────────────────────────────────────
 # Full path to the OVarFlow input folder.
-# Can be passed as the first argument: qsub run_ovarflow.sh /path/to/input
-# If not provided, the hardcoded value below is used.
-input_path="${1:-/cluster/majf_lab/mtinti/MUT_analysis/experiments/MyExperiment/ovarflow_input_MyExp}"
+# Either hardcode it below or pass it as the first argument:
+#   qsub run_ovarflow.sh /path/to/ovarflow_input_MyExp
+input_path="${1:-}"
+if [[ -z "$input_path" ]]; then
+    echo "ERROR: input_path is not set. Hardcode it in the script or pass it as the first argument." >&2
+    exit 1
+fi
 # ──────────────────────────────────────────────────────────────────────────────
 
 # ── FIXED SETTINGS (do not change) ───────────────────────────────────────────
+# Replace with the path to your own .sif file
 SIF='/cluster/majf_lab/mtinti/MUT_analysis/experiments/OVarFlow_May10_2021_BQSR.sif'
 export THREADS=40
 # ──────────────────────────────────────────────────────────────────────────────
