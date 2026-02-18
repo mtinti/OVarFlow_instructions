@@ -1,221 +1,89 @@
-# OVarFlow_instructions
+# OVarFlow – How to Run on the Cluster
 
+## 1. Input folder structure
 
-## Reference to read
-- https://ovarflow.readthedocs.io/en/latest/UsageOfOVarFlow/CondaSnakemake.html#what-are-read-groups
-- https://ovarflow.readthedocs.io/en/latest/UsageOfOVarFlow/CondaSnakemake.html#the-csv-configuration-file
-- https://ovarflow.readthedocs.io/en/latest/UsageOfOVarFlow/CondaSnakemake.html#starting-the-workflow
-
-
-- https://ovarflow.readthedocs.io/en/latest/UsageOfOVarFlow/Configuration.html
-
-## Make .gz example 
+Create a single input directory (name it however you like, e.g. `ovarflow_input_MyExp`) containing exactly three sub-folders and the CSV config file:
 
 ```
-seqkit sort -n \
-REFERENCE_INPUT_DIR_SylvioX10-1/TriTrypDB-68_TcruziSylvioX10-1_Genome.fasta \
-> REFERENCE_INPUT_DIR_SylvioX10-1/TriTrypDB-68_TcruziSylvioX10-1_Genome.sorted.fasta
-
-gzip -c REFERENCE_INPUT_DIR_SylvioX10-1/TriTrypDB-68_TcruziSylvioX10-1_Genome.sorted.fasta > \
-REFERENCE_INPUT_DIR_SylvioX10-1/SW_SylvioX10-1.fa.gz
-
-/cluster/majf_lab/mtinti/RNAseq/viper-test/genomes/gff3sort/gff3sort.pl --precise --chr_order natural \
-REFERENCE_INPUT_DIR_SylvioX10-1/TriTrypDB-68_TcruziSylvioX10-1.gff \
-> REFERENCE_INPUT_DIR_SylvioX10-1/TriTrypDB-68_TcruziSylvioX10-1.sorted.gff
-
-cp REFERENCE_INPUT_DIR_SylvioX10-1/TriTrypDB-68_TcruziSylvioX10-1.sorted.gff \
-REFERENCE_INPUT_DIR_SylvioX10-1/SW_SylvioX10-1.sorted.gff
+ovarflow_input_MyExp/
+├── FASTQ_INPUT_DIR/               # paired-end FASTQ files
+├── OLD_GVCF_FILES/                # leave empty if not reusing old calls
+├── REFERENCE_INPUT_DIR/           # reference genome + annotation
+└── samples_and_read_groups.csv
 ```
 
+---
 
-## input folder structure
-```
-INPUT DIR (ovarflow_input_LdiBPK282A1 in cluster example)
-|-FASTQ_INPUT_DIR
-|-OLD_GVCF_FILES
-|-REFERENCE_INPUT_DIR
-|-samples_and_read_groups.csv
-```
+## 2. Prepare the reference genome
 
-## example of samples_and_read_groups.csv
+Place in `REFERENCE_INPUT_DIR/` a **gzipped FASTA** and a **GFF** file.
+Both files must share the same basename, which is also what you will put in the CSV (see below).
 
 ```
-Reference Sequence:,SW_SylvioX10-1.fa.gz
-Reference Annotation:,SW_SylvioX10-1.sorted.gff
+REFERENCE_INPUT_DIR/{genome}.fa.gz
+REFERENCE_INPUT_DIR/{genome}.sorted.gff
+```
+
+The FASTA must be gzipped:
+
+```bash
+gzip -c genome.fasta > REFERENCE_INPUT_DIR/{genome}.fa.gz
+```
+
+Replace `{genome}` with a short descriptive name, e.g. `SW_LdonovaniBPK282A1`.
+
+---
+
+## 3. Prepare the FASTQ files
+
+OVarFlow expects paired files named **exactly**:
+
+```
+<sample>_R1.fastq.gz
+<sample>_R2.fastq.gz
+```
+
+Rename your files to match this convention before placing them in `FASTQ_INPUT_DIR/`.
+
+---
+
+## 4. The sample CSV file
+
+`samples_and_read_groups.csv` lives directly inside the input folder.
+Edit the template below – **do not change the row/column order**.
+
+```csv
+Reference Sequence:,{genome}.fa.gz
+Reference Annotation:,{genome}.sorted.gff
 
 Min sequence length:,2000
 
 old gvcf to include:,
 
 forward reads,reverse reads,ID,PL - plattform technology,CN - sequencing center,LB - library name,SM - uniq sample name
-V350357015_L02_B5GANIokjbRAAGA-30_R1.fastq.gz,V350357015_L02_B5GANIokjbRAAGA-30_R2.fastq.gz,id_TcCRK12_dKOdd1,illumina,ENA,lib_TcCRK12_dKOdd1,TcCRK12_dKOdd1
-V350357015_L02_B5GANIokjbRAAHA-114_R1.fastq.gz,V350357015_L02_B5GANIokjbRAAHA-114_R2.fastq.gz,id_TcCRK12BirA5C6,illumina,ENA,lib_TcCRK12BirA5C6,TcCRK12BirA5C6
+Sample1_R1.fastq.gz,Sample1_R2.fastq.gz,id_Sample1,illumina,ENA,lib_Sample1,Sample1
+Sample2_R1.fastq.gz,Sample2_R2.fastq.gz,id_Sample2,illumina,ENA,lib_Sample2,Sample2
 ```
 
-## Logic
-```
-ovarflow then expect expect 
-V350357015_L02_B5GANIokjbRAAGA-30_R1.fastq.gz
-V350357015_L02_B5GANIokjbRAAGA-30_R2.fastq.gz
-V350357015_L02_B5GANIokjbRAAHA-114_R1.fastq.gz
-V350357015_L02_B5GANIokjbRAAHA-114_R2.fastq.gz
-in FASTQ_INPUT_DIR
+- `{genome}` must match the filenames you created in step 2.
+- `SM` (last column) must be unique per sample and kept short.
+- Leave `old gvcf to include:` empty if you have no prior calls to merge.
 
+---
 
-You can keep  OLD_GVCF_FILES empty, I never tried to put in there old variant calls
+## 5. Submit the job
 
-REFERENCE_INPUT_DIR
-SW_SylvioX10-1.fa.gz (sorted gzipped)
-SW_SylvioX10-1.sorted.gff (sorted) can be gzipped as well, it works without gzip
-used gff3sort.pl at https://github.com/tao-bioinfo/gff3sort/tree/master for sorting, might not be necessary
-```
+Use `run_ovarflow.sh` (see the script in this folder).
+Set the one variable at the top of the script and submit:
 
-## miscellaneous and utility script, not strictly necessary
+```bash
+# Edit this line in run_ovarflow.sh:
+input_path='/path/to/ovarflow_input_MyExp'
 
-- BGI sometimes output multiple fastq pairs for the sampe sample, those need to be merged togheter using this utility script
-merge_fastq.sh
-
-
-- ovarflow wants the file name of fastq fiiles ending _R1.fastq.gz and _R2.fastq.gz rename was done with this script
-
-```python
-import os
-import re
-#GOOD ONE
-def rename_fastq_files(root_dir):
-    # Compile regex patterns for matching file names
-    pattern1 = re.compile(r'(.*)_1\.fq\.gz$')
-    pattern2 = re.compile(r'(.*)_2\.fq\.gz$')
-
-    # Walk through all subdirectories
-    for dirpath, dirnames, filenames in os.walk(root_dir):
-        for filename in filenames:
-            
-            # Check if the file matches the first pattern
-            match1 = pattern1.match(filename)
-            if match1:
-                old_name = os.path.join(dirpath, filename)
-                new_name = os.path.join(dirpath, f"{match1.group(1)}_R1.fastq.gz")
-                os.rename(old_name, new_name)
-                print(f"Renamed: {old_name} -> {new_name}")
-            
-            # Check if the file matches the second pattern
-            match2 = pattern2.match(filename)
-            if match2:
-                old_name = os.path.join(dirpath, filename)
-                new_name = os.path.join(dirpath, f"{match2.group(1)}_R2.fastq.gz")
-                os.rename(old_name, new_name)
-                print(f"Renamed: {old_name} -> {new_name}")
-
-#Usage
-root_directory = "/cluster/majf_lab/mtinti/MUT_analysis/experiments/MetaAnalysis/DataSets/LdSQSBLA/"
-rename_fastq_files(root_directory)
+qsub run_ovarflow.sh
 ```
 
-
-- this utility create a sample list starting from a folder with the samples/fastq pair organization. the output can be copy pasted in samples_and_read_groups.csv
-below the forward reads,reverse... reads,ID,PL headers
-
-```python
-import os
-import re
-
-def parse_fastq_pairs(root_dir):
-    # Compile regex patterns for matching file names
-    pattern1 = re.compile(r'(.*)_R1\.fastq\.gz$')
-    pattern2 = re.compile(r'(.*)_R2\.fastq\.gz$')
-
-    # Walk through all subdirectories
-    for dirpath, dirnames, filenames in os.walk(root_dir):
-        # Get the folder name and replace dots and hyphens with underscores
-        folder_name = os.path.basename(dirpath).replace('.', '_').replace('-', '_')
-        
-        # Dictionary to store fastq pairs
-        fastq_pairs = {}
-
-        # Find all fastq files and pair them
-        for filename in filenames:
-            match1 = pattern1.match(filename)
-            match2 = pattern2.match(filename)
-            
-            if match1:
-                base_name = match1.group(1)
-                if base_name not in fastq_pairs:
-                    fastq_pairs[base_name] = {'R1': filename}
-                else:
-                    fastq_pairs[base_name]['R1'] = filename
-            elif match2:
-                base_name = match2.group(1)
-                if base_name not in fastq_pairs:
-                    fastq_pairs[base_name] = {'R2': filename}
-                else:
-                    fastq_pairs[base_name]['R2'] = filename
-
-        # Print information for complete pairs
-        for base_name, files in fastq_pairs.items():
-            if 'R1' in files and 'R2' in files:
-                print(f"{files['R1']},{files['R2']},id_{folder_name},illumina,ENA,lib_{folder_name},{folder_name}")
-
-
-
-#root_directory = "/cluster/majf_lab/mtinti/MUT_analysis/experiments/MetaAnalysisTrypCruzi/DataSets/TcCRK12/"
-parse_fastq_pairs(root_directory)
-```
-
-- finally the files were symlinked to the FASTQ_INPUT_DIR folder
-```python
-import os
-import re
-
-def create_fastq_symlinks(source_dir):
-    # Compile regex patterns for matching file names
-    pattern1 = re.compile(r'(.*)_R1\.fastq\.gz$')
-    pattern2 = re.compile(r'(.*)_R2\.fastq\.gz$')
-
-    # Create FASTQ_INPUT_DIR at the same level as source_dir
-    parent_dir = os.path.dirname(source_dir)
-    fastq_input_dir = os.path.join(source_dir, 'FASTQ_INPUT_DIR')
-    os.makedirs(fastq_input_dir, exist_ok=True)
-
-    # Walk through all subdirectories
-    for dirpath, dirnames, filenames in os.walk(source_dir):
-        # Dictionary to store fastq pairs
-        fastq_pairs = {}
-
-        # Find all fastq files and pair them
-        for filename in filenames:
-            match1 = pattern1.match(filename)
-            match2 = pattern2.match(filename)
-            
-            if match1:
-                base_name = match1.group(1)
-                if base_name not in fastq_pairs:
-                    fastq_pairs[base_name] = {'R1': filename}
-                else:
-                    fastq_pairs[base_name]['R1'] = filename
-            elif match2:
-                base_name = match2.group(1)
-                if base_name not in fastq_pairs:
-                    fastq_pairs[base_name] = {'R2': filename}
-                else:
-                    fastq_pairs[base_name]['R2'] = filename
-
-        # Create symlinks for complete pairs
-        for base_name, files in fastq_pairs.items():
-            if 'R1' in files and 'R2' in files:
-                for read in ['R1', 'R2']:
-                    source_file = os.path.join(dirpath, files[read])
-                    link_name = os.path.join(fastq_input_dir, files[read])
-                    
-                    # Create symlink
-                    if not os.path.exists(link_name):
-                        os.symlink(source_file, link_name)
-                        print(f"Created symlink: {link_name} -> {source_file}")
-                    else:
-                        print(f"Symlink already exists: {link_name}")
-
-# Usage
-source_directory = root_directory#"/cluster/majf_lab/mtinti/MUT_analysis/experiments/MetaAnalysisTrypBrucei/DataSets/TbYBA/"
-create_fastq_symlinks(source_directory)
-```
-
+Results are copied back into `ovarflow_res/` inside the input folder:
+- `24_annotated_variants_2/` – annotated VCFs
+- `03_mark_duplicates/` – deduplicated BAMs
+- `snpEffDB/` – snpEff annotation database
