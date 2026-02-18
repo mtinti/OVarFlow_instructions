@@ -12,8 +12,10 @@
 set -e
 
 # ── USER SETTINGS ─────────────────────────────────────────────────────────────
-# Full path to the OVarFlow input folder
-input_path='/cluster/majf_lab/mtinti/MUT_analysis/experiments/MyExperiment/ovarflow_input_MyExp'
+# Full path to the OVarFlow input folder.
+# Can be passed as the first argument: qsub run_ovarflow.sh /path/to/input
+# If not provided, the hardcoded value below is used.
+input_path="${1:-/cluster/majf_lab/mtinti/MUT_analysis/experiments/MyExperiment/ovarflow_input_MyExp}"
 # ──────────────────────────────────────────────────────────────────────────────
 
 # ── FIXED SETTINGS (do not change) ───────────────────────────────────────────
