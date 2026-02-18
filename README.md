@@ -69,6 +69,8 @@ Sample2_R1.fastq.gz,Sample2_R2.fastq.gz,id_Sample2,illumina,ENA,lib_Sample2,Samp
 - `SM` (last column) must be unique per sample and kept short.
 - Leave `old gvcf to include:` empty if you have no prior calls to merge.
 
+A real-world example is available at [`example_files/samples_and_read_groups.csv`](example_files/samples_and_read_groups.csv).
+
 ---
 
 ## 5. Submit the job
